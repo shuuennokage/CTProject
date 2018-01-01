@@ -63,8 +63,8 @@ def main():
 			seekP = 0
                 elif(command=='item'):
                     print("Drank the red aid.")
-                    if((HP+2)<=HPMax):
-                        HP = HP + 2
+                    if((HP+3)<=HPMax):
+                        HP = HP + 3
 			print("The HP is now: %d" %(HP))
                     else:
                         HP = HPMax
