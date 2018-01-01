@@ -1,3 +1,4 @@
+# coding=utf-8
 import sys
 
 import telegram
@@ -33,7 +34,7 @@ class Game(Machine):
     pass
 
 gameBot = Game(states = states, transitions = transitions, initial = 'swamp')
-print(gameBot.state)
+#print(gameBot.state)
 
 def main():
     seekP = 0;
@@ -45,8 +46,9 @@ def main():
     SIZ = random.randint(0, 6) + random.randint(0, 6) + 6
     INT = random.randint(0, 6) + random.randint(0, 6) + 6
     LUK = POW * 5
-    HP = (CON + SIZ) / 2
+    HP = (CON + SIZ) / 2 + 1
     HPMax = HP
+    text = 'non'
     lastMessageId = 0;
     updates = bot.getUpdates();
 
@@ -61,7 +63,27 @@ def main():
             msg_id = update["update_id"];
             user_id = update["message"]["from_user"]["id"]
             lastMessageId = msg_id;
-            bot.sendMessage(user_id, text);
+            #bot.sendMessage(user_id, text);
+            if(text=='start'):
+	        gameActive = 1;
+		text = '你成為了又一位的異世界勇者\n準備踏上打倒魔王的旅程...'
+		bot.sendMessage(user_id, text);
+		text = "人物數值:\nSTR(力量):{0}   CON(體質):{1}   POW(意志):{2}\nDEX(敏捷):{3}   SIZ(體型):{4}   INT(智力):{5}\nHP(生命):{6}".format(STR, CON, POW, DEX, SIZ, INT, HP)
+		bot.sendMessage(user_id, text);
+		text = 
+		while(gameActive):
+		    updates = bot.getUpdates(offset=lastMessageId)
+        	    updates = [update for update in updates if update["update_id"]>lastMessageId]
+        	    for update in updates:
+            		text = update["message"]["text"];
+            		msg_id = update["update_id"];
+            		user_id = update["message"]["from_user"]["id"]
+            		lastMessageId = msg_id;
+            		bot.sendMessage(user_id, text);
+		    sleep(0.5);
+	    else:
+	        text = '歡迎來到Izayoi的game bot!\n在這裡,你可以成為闖蕩異世界的勇者,展開屬於自己的冒險!\n輸入 start 指令以開始遊戲!'
+	        bot.sendMessage(user_id, text);
         #game loop
         
         sleep(0.5);
