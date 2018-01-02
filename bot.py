@@ -47,8 +47,8 @@ def main():
     shield = 0;
     plus = 0;
     resist = 0;
-    maouHP = 100;
-    maouHPMax = 100;
+    maouHP = 120;
+    maouHPMax = 120;
     maouAtk = 5
     maouDef = 3
     maouStart = 0;
