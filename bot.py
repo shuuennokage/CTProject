@@ -14,12 +14,25 @@ app = Flask(__name__)
 botToken = "438457440:AAFiiRCzMGW-vlBC2Jv43W4vdR0uULkzEvo"
 bot = telegram.Bot(botToken)
 
+class Game(Machine):
+    def getInV(self):
+        print('get into the volcano...')
+    def getInM(self):
+        print('bumped into maou...')
+    def getInD(self):
+        print('You died...')
+    def getInW(self):
+        print('You win!')
 states = [
     'swamp',
-    'volcano',
-    'maou',
-    'dead',
-    'win'
+#    'volcano',
+    {'name' : 'volcano', 'on_enter' : ['getInV']},
+#    'maou',
+    {'name' : 'maou', 'on_enter' : ['getInM']},
+#    'dead',
+    {'name' : 'dead', 'on_enter' : ['getInD']},
+#    'win'
+    {'name' : 'win', 'on_enter' : ['getInW']}
 ]
 
 transitions = [
@@ -28,9 +41,6 @@ transitions = [
     ['die', '*', 'dead'],
     ['die_maou', 'maou', 'win']
 ]
-
-class Game(Machine):
-    pass
 
 gameBot = Game(states = states, transitions = transitions, initial = 'swamp', title = 'Adventure State')
 #print(gameBot.state)
@@ -50,7 +60,7 @@ def main():
     resist = 0;
     maouHP = 120;
     maouHPMax = 120;
-    maouAtk = 5
+    maouAtk = 6
     maouDef = 3
     maouStart = 0;
     maouAttk = 0;
@@ -77,7 +87,7 @@ def main():
         lastMessageId = updates[-1]["update_id"]
     
     while(True):
-        print('main')
+        print('You can start now')
         updates = bot.getUpdates(offset=lastMessageId, timeout=1)
         updates = [update for update in updates if update["update_id"]>lastMessageId]
         for update in updates:
@@ -376,13 +386,13 @@ def main():
                                     text = '魔王狂笑著，彷彿在恥笑你是個天大的笑話。(沒有動作)'
                                 bot.sendMessage(user_id, text);
                                 sleep(0.2);
-                        if(gameBot.state=='swamp' and seekP>=20):
+                        if(gameBot.state=='swamp' and seekP>=17):
                             seekP = 0;
                             gameBot.trigger('area1_clear')
                             text = '你發現了通往下一個地區的路徑。\n中繼點: 炎獄山脈\n...在這個地區蔓延的只有熾熱，還有地上遍布的熔岩跟石頭碎塊，眼前的一切彷彿都在搖晃。你並沒有放棄，繼續在這個地方尋找著通往魔王城的道路。'
                             bot.sendMessage(user_id, text);
                             sleep(0.2);
-                        elif(gameBot.state=='volcano' and seekP>=25):
+                        elif(gameBot.state=='volcano' and seekP>=20):
                             seekP = 0;
                             maouStart = 1;
                             gameBot.trigger('area2_clear')
