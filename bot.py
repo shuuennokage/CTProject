@@ -32,8 +32,9 @@ transitions = [
 class Game(Machine):
     pass
 
-gameBot = Game(states = states, transitions = transitions, initial = 'swamp')
+gameBot = Game(states = states, transitions = transitions, initial = 'swamp', title = 'Adventure State')
 #print(gameBot.state)
+gameBot.get_graph().draw('state_diagram.png', prog = 'dot')
 
 def main():
     seekP = 0;
@@ -47,8 +48,8 @@ def main():
     shield = 0;
     plus = 0;
     resist = 0;
-    maouHP = 100;
-    maouHPMax = 100;
+    maouHP = 120;
+    maouHPMax = 120;
     maouAtk = 5
     maouDef = 3
     maouStart = 0;
