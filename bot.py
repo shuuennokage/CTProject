@@ -40,6 +40,7 @@ def main():
     gameActive = 0;
     textChange = 0;
     against = 0;
+    against2 = 0;
     limit = 0;
     sword = 0;
     shield = 0;
@@ -48,7 +49,7 @@ def main():
     POW = random.randint(1, 6) + random.randint(1, 6) + random.randint(1, 6)
     DEX = random.randint(1, 6) + random.randint(1, 6) + random.randint(1, 6)
     SIZ = random.randint(1, 6) + random.randint(1, 6) + 6
-    INT = random.randint(1, 6) + random.randint(1, 6) + 6
+    #INT = random.randint(1, 6) + random.randint(1, 6) + 6
     LUK = POW * 5
     HP = int((CON + SIZ) / 2 + 1)
     HPMax = HP
@@ -115,7 +116,8 @@ def main():
                                 if(limit>99):
                                     limit = 99
                                 if(against<(STR*6)):
-                                    text = '旁邊的刺藤纏住了你的腳踝!你嘗試掙脫:\n(STR抵抗6倍: {0}/{1} 成功)\n你成功掙脫了束縛，刺藤依舊在你背後張牙舞爪地扭動著。(調查點+{2})'.format(against, limit, textChange)
+                                    STR = STR + 1
+                                    text = '旁邊的刺藤纏住了你的腳踝!你嘗試掙脫:\n(STR抵抗6倍: {0}/{1} 成功)\n你成功掙脫了束縛，刺藤依舊在你背後張牙舞爪地扭動著。(STR+1)(調查點+{2})'.format(against, limit, textChange)
                                 else:
                                     HP = HP - 1
                                     text = '旁邊的刺藤纏住了你的腳踝!你嘗試掙脫:\n(STR抵抗6倍: {0}/{1} 失敗)\n你失敗了，刺藤割傷了你的皮膚。(HP-1)(調查點+{2})'.format(against, limit, textChange)
@@ -128,7 +130,8 @@ def main():
                                 if(limit>99):
                                     limit = 99
                                 if(against<(POW*4)):
-                                    text = '沼澤的毒氣模糊著你的心智，你感覺像要被拉到另一個世界。\n(POW抵抗4倍: {0}/{1} 成功)\n你成功回復了神智，拍打著臉加讓自己有幹勁繼續探索。(調查點+{2})'.format(against, limit, (textChange - 1))
+                                    POW = POW + 1
+                                    text = '沼澤的毒氣模糊著你的心智，你感覺像要被拉到另一個世界。\n(POW抵抗4倍: {0}/{1} 成功)\n你成功回復了神智，拍打著臉加讓自己有幹勁繼續探索。(POW+1)(調查點+{2})'.format(against, limit, (textChange - 1))
                                 else:
                                     HP = HP - 2
                                     text = '沼澤的毒氣模糊著你的心智，你感覺像要被拉到另一個世界。\n(POW抵抗4倍: {0}/{1} 失敗)\n你因為毒氣而昏厥，醒來的時候，身上多了不明的啃咬痕跡跟莫名的不適感。(HP-2)(調查點+{2})'.format(against, limit, (textChange - 1))
@@ -142,10 +145,39 @@ def main():
                                 bot.sendMessage(user_id, text);
                                 sleep(0.2);
                         elif(text=='seek' and gameBot.state=='volcano'):
-                            seekP = seekP + 10;
-                            text = 'Volcano seek'
-                            bot.sendMessage(user_id, text);
-                            sleep(0.2);
+                            textChange = random.randint(1, (7-shield))
+                            if(textChange==1 or textChange==2):
+                                seekP = seekP + textChange;
+                                if(textChange==1):
+                                    aid = aid + 1
+                                    text = '你發現了一瓶紅色藥水。(紅色藥水:{0}瓶)'.format(aid)
+                                    bot.sendMessage(user_id, text);
+                                    sleep(0.2);
+                                text = '岩壁、地板、空中，四處都是熱氣。\n猛烈的熱度侵蝕著你的精神與體力，每一步都使你汗如雨下。(調查點+{0})'.format(textChange)
+                                bot.sendMessage(user_id, text);
+                                sleep(0.2);
+                            elif(textChange==3):
+                                seekP = seekP + textChange;
+                                text = '岩漿肆無忌憚的噴發著，那份狂氣彷彿要燒盡這世界上的一切，卻又帶著些許的美麗。(調查點+{0})'.format(textChange)
+                                bot.sendMessage(user_id, text);
+                                sleep(0.2);
+                            elif(textChange==4):
+                                seekP = seekP + textChange;
+                                against = random.randint(0, 99)
+                                limit = (DEX*4) + LUK
+                                if(limit>99):
+                                    limit = 99
+                                if(against<(DEX*4)):
+                                    DEX = DEX + 1
+                                    text = '身旁的岩漿突然竄出了魔物!一隻熔岩獸衝向了你，你嘗試逃跑:\n(DEX抵抗4倍: {0}/{1} 成功)\n你成功逃跑了，方才的追逐讓你嚇出了一身冷汗。(DEX+1)(調查點+{2})'.format(against, limit, (textChange - 1))
+                                else:
+                                    against2 = random.randint(0, 99)
+                                    if(against2<LUK):
+                                        HP = HP - 2
+                                        text = '身旁的岩漿突然竄出了魔物!一隻熔岩獸衝向了你，你嘗試逃跑:\n(DEX抵抗4倍: {0}/{1} 失敗)\n(LUK判定: 隱藏 成功)\n你僥倖逃出了熔岩獸的魔爪，背後被抓傷的地方還熱辣辣的發疼。(HP-2)(調查點+{2})'.format(against, limit, (textChange - 1))
+                                    else:
+                                        HP = HP - 4
+                                        text = '身旁的岩漿突然竄出了魔物!一隻熔岩獸衝向了你，你嘗試逃跑:\n(DEX抵抗4倍: {0}/{1} 失敗)\n(LUK判定: 隱藏 失敗)\n熔岩獸朝你吐出了滾燙的火球，你在岩地上痛苦的打滾，費了好大的勁才把身上的火撲滅。(HP-4)(調查點+{2})'.format(against, limit, (textChange - 1))
                         elif(text=='status'):
                             text = '人物數值:\nSTR(力量):{0}   CON(體質):{1}\nPOW(意志):{2}   DEX(敏捷):{3}\nHP(生命上限):{4}   紅色藥水:{5}瓶'.format(STR, CON, POW, DEX, HP, aid)
                             bot.sendMessage(user_id, text);
@@ -158,7 +190,7 @@ def main():
                             else:
                                 HP = HPMax
                                 #print("The HP is fully recovered to: %d" %(HP))
-                            text = '你喝下了一瓶紅色藥水，微微的辛辣綻放在你的舌尖，你感覺到一股溫暖在體內流動。\n(HP+3, 現在HP: {0})(藥水剩餘{1}瓶)'.format(HP, aid)
+                            text = '你喝下了一瓶紅色藥水，微微的辛辣與苦澀綻放在你的舌尖，你感覺到一股溫暖在體內流動，傷口也稍微癒合了。\n(HP+3, 現在HP: {0} 最大值: {1})(藥水剩餘{2}瓶)'.format(HP, HPMax, aid)
                             bot.sendMessage(user_id, text);
                             sleep(0.2);
                         if(gameBot.state=='swamp' and seekP>=20):
