@@ -47,7 +47,17 @@ def main():
     shield = 0;
     plus = 0;
     resist = 0;
+    maouHP = 100;
+    maouHPMax = 100;
+    maouAtk = 5
+    maouDef = 3
     maouStart = 0;
+    maouAttk = 0;
+    damage = 0;
+    attack = 0;
+    defend = 0;
+    cd = 0;
+    big = 0;
     STR = 0;
     CON = 0;
     POW = 0;
@@ -57,6 +67,7 @@ def main():
     HP = 0;
     HPMax = 0;
     aid = 0;
+    noAtk = 0;
     text = 'non';
     lastMessageId = 0;
     updates = bot.getUpdates();
@@ -78,9 +89,11 @@ def main():
             #bot.sendMessage(user_id, text);
             if(text=='start'):
                 gameActive = 1;
+                gameBot.set_state('swamp')
                 text = '你成為了又一位的異世界勇者\n準備踏上打倒魔王的旅程...'
                 bot.sendMessage(user_id, text);
                 sleep(0.2);
+                seekP = 0;
                 STR = random.randint(1, 6) + random.randint(1, 6) + random.randint(1, 6)
                 CON = random.randint(1, 6) + random.randint(1, 6) + random.randint(1, 6)
                 POW = random.randint(1, 6) + random.randint(1, 6) + random.randint(1, 6)
@@ -90,6 +103,23 @@ def main():
                 HP = int((CON + SIZ) / 2 + 1)
                 HPMax = HP
                 aid = 5;
+                plus = 0;
+                resist = 0;
+                maouStart = 0;
+                maouAttk = 0;
+                damage = 0;
+                attack = 0;
+                defend = 0;
+                textChange = 0;
+                against = 0;
+                against2 = 0;
+                limit = 0;
+                sword = 0;
+                shield = 0;
+                cd = 0;
+                big = 0;
+                noAtk = 0;
+                maouHP = maouHPMax
                 text = '人物數值:\nSTR(力量):{0}   CON(體質):{1}\nPOW(意志):{2}   DEX(敏捷):{3}\nHP(生命):{4}   HP Max(生命上限):{5}\n紅色藥水:{6}瓶\n傷害加成(damage plus):{7}   傷害減免(damage resistance):{8}'.format(STR, CON, POW, DEX, HP, HPMax, aid, plus, resist)
                 bot.sendMessage(user_id, text);
                 sleep(0.2);
@@ -208,6 +238,7 @@ def main():
                                     CON = CON + 1
                                     text = '一陣恐怖的熱浪襲來，身體猶如被燒灼一般，你試圖抵抗這強烈的不適:\n(CON抵抗4倍: {0}/{1} 成功)\n你從暈眩跟反胃感中穩了住腳，將水灑在身上，讓熱量隨著水分蒸發而去。(CON+1)(調查進度+{2})'.format(against, limit, (textChange - 1))
                                 else:
+                                    HP = HP - 2
                                     text = '一陣恐怖的熱浪襲來，身體猶如被燒灼一般，你試圖抵抗這強烈的不適:\n(CON抵抗4倍: {0}/{1} 失敗)\n你忍受不住這陣熱浪的侵襲，倒在了地上，回過神來，面前是自己些許的嘔吐物，身上還殘留著些許熱汗。(HP-2)(調查進度+{2})'.format(against, limit, (textChange - 1))
                                 bot.sendMessage(user_id, text);
                                 sleep(0.2);
@@ -218,6 +249,13 @@ def main():
                                 if(limit>99):
                                     limit = 99
                                 if(against<LUK):
+                                    HP = HP + 1
+                                    HPMax = HPMax + 1
+                                    STR = STR + 1
+                                    CON = CON + 1
+                                    POW = POW + 1
+                                    DEX = DEX + 1
+                                    LUK = POW * 5
                                     text = '你似乎感覺到背後有什麼動靜，猛然的轉過身:\n(LUK判定: 隱藏 成功)\n你發現了一本掉在地上的魔法書，裡面記載的是失傳的身體強化魔法。(全屬性+1)(調查進度+{0})'.format((textChange - 2))
                                 else:
                                     POW = POW - 1
@@ -231,7 +269,40 @@ def main():
                                 text = '在火山岩的黑暗縫隙中，你注意到有個物體正在閃爍著，是一面純銀的鳶型盾，那聖潔的光芒彷彿能隔絕一切邪惡之物。\n你得到了輝銀聖盾(傷害減免+3)(調查進度+{0})'.format((textChange - 1))
                                 bot.sendMessage(user_id, text);
                                 sleep(0.2);
+                        elif(text=='attack' and gameBot.state=='maou'):
+                            #player's turn
+                            against = random.randint(0, 99)
+                            if(against<LUK):
+                                attack = random.randint(1, 3)
+                                damage = STR + attack + plus - maouDef
+                                text = '你向魔王揮出了劍!劍身確實的砍進的魔王的身軀，黑紫色的血從傷口噴湧而出，濺上了你的盔甲。(對魔王造成{0}點傷害)'.format(damage)
+                            else:
+                                damage = STR + plus - maouDef
+                                text = '你向魔王揮出了劍!然而劍身掠過了魔王的身軀，只在空中劃出一道弧形的血痕。(對魔王造成{0}點傷害)'.format(damage)
+                            maouHP = maouHP - damage
+                            bot.sendMessage(user_id, text);
+                            sleep(0.2);
+                        elif(text=='defend' and gameBot.state=='maou'):
+                            #player's turn
+                            defend = random.randint(1, 3)
+                            text = '你舉起了盾，架起了防禦態勢!(下次遭到魔王攻擊的傷害減少{0}點)'.format(defend)
+                            bot.sendMessage(user_id, text);
+                            sleep(0.2);
+                        elif(text=='skill' and gameBot.state=='maou'):
+                            #player's turn
+                            if(cd!=0):
+                                noAtk = 1
+                                text = '技能冷卻尚未結束，無法使用!'
+                            else:
+                                damage = (STR + plus - maouDef) * 2
+                                text = '你使用了\"全力一擊\"!對魔王造成了兩倍的攻擊傷害!(造成{0}點傷害)'.format(damage)
+                                maouHP = maouHP - damage
+                                cd = cd + 3
+                            bot.sendMessage(user_id, text);
+                            sleep(0.2);
                         elif(text=='status'):
+                            if(gameBot.state=='maou'):
+                                noAtk = 1
                             text = '人物數值:\nSTR(力量):{0}   CON(體質):{1}\nPOW(意志):{2}   DEX(敏捷):{3}\nHP(生命):{4}   HP Max(生命上限):{5}\n紅色藥水:{6}瓶\n傷害加成(damage plus):{7}   傷害減免(damage resistance):{8}'.format(STR, CON, POW, DEX, HP, HPMax, aid, plus, resist)
                             bot.sendMessage(user_id, text);
                             sleep(0.2);
@@ -239,10 +310,8 @@ def main():
                             aid = aid - 1
                             if((HP+3)<=HPMax):
                                 HP = HP + 3
-                                #print("The HP is now: %d" %(HP))
                             else:
                                 HP = HPMax
-                                #print("The HP is fully recovered to: %d" %(HP))
                             text = '你喝下了一瓶紅色藥水，微微的辛辣與苦澀綻放在你的舌尖，你感覺到一股溫暖在體內流動，傷口也稍微癒合了。\n(HP+3, 現在HP: {0} 最大值: {1})(藥水剩餘{2}瓶)'.format(HP, HPMax, aid)
                             bot.sendMessage(user_id, text);
                             sleep(0.2);
@@ -254,7 +323,7 @@ def main():
                                 bot.sendMessage(user_id, text);
                                 sleep(0.2);
                             else:
-                                text = '...都已經來到這裡了，怎麼能夠輕易退卻!你咬緊牙關，抹消逃跑的念頭，繼續奮戰。'
+                                text = '...都已經來到這裡了，怎麼能夠輕易退卻!\n你咬緊牙關，抹消逃跑的念頭，繼續奮戰。'
                                 bot.sendMessage(user_id, text);
                                 sleep(0.2);
                         elif(text=='hurt'):
@@ -274,6 +343,38 @@ def main():
                                 text = '你的心中響起了這樣一道聲音，你不知道它到底從哪裡來。也許，是這個世界在嘗試與你對話吧。'
                             bot.sendMessage(user_id, text);
                             sleep(0.2);
+                        if(maouStart==1 and noAtk==0 and maouHP>0):
+                            #maou's turn
+                            if(maouAttk==0):
+                                maouAttk = 1;
+                                text = '\"哼!看看是誰來了?余只看到又一個既無知又可笑，前來送死的螻蟻啊!\"\n魔王以極度輕蔑的眼神與口吻，緩緩的瞥向了你，你不由得感到渾身顫慄。\n魔王緩緩起身，\"...余也正好興致高漲，就陪汝玩玩吧!\"'
+                                bot.sendMessage(user_id, text);
+                                sleep(0.2);
+                            else:
+                                textChange = random.randint(1, 4)
+                                if(textChange==1):
+                                    HP = HP - (maouAtk - resist - defend)
+                                    text = '魔王手中的黑光綻裂，射向了你!(你受到了{0}點傷害)'.format((maouAtk - resist - defend))
+                                    defend = 0
+                                elif(textChange==2):
+                                    if(big==0):
+                                        big = 1
+                                        text = '魔王露出了戲謔的笑容，開始詠唱咒語，龐大的魔素在他面前濃縮。(下一次魔王的傷害提高1.5倍)'
+                                    else:
+                                        text = '魔王靜靜的睥睨著你，彷彿你在他眼中，只是一顆沙粒不過的存在。(沒有動作)'
+                                elif(textChange==3):
+                                    if(big==1):
+                                        big = 0
+                                        HP = HP - (maouAtk - resist - defend + 2)
+                                        text = '魔王將手中聚集的魔素全部放出，魔力的奔流將你吞噬!(你受到了{0}點傷害)'.format((maouAtk - resist - defend + 2))
+                                    else:
+                                        HP = HP - (maouAtk - resist - defend - 1)
+                                        defend = 0
+                                        text = '魔王手中的黑光綻裂，射向了你!(你受到了{0}點傷害)'.format((maouAtk - resist - defend - 1))
+                                elif(textChange==4):
+                                    text = '魔王狂笑著，彷彿在恥笑你是個天大的笑話。(沒有動作)'
+                                bot.sendMessage(user_id, text);
+                                sleep(0.2);
                         if(gameBot.state=='swamp' and seekP>=20):
                             seekP = 0;
                             gameBot.trigger('area1_clear')
@@ -295,9 +396,20 @@ def main():
                             sleep(0.2);
                             gameActive = 0
                             gameEnd = 1
+                        elif(maouHP<=0):
+                            seekP = 0;
+                            gameBot.trigger('die_maou')
+                            text = '魔王露出了滿意的微笑，\"真是場不錯的戰鬥啊...冒險者....\"\n他的軀體化作灰燼，在一陣又一陣風的吹拂下，消失無蹤。\n你將劍插在地面上，仰天長嘯，你知道這是只屬於你的勝利!\n\n----但是，冒險者與魔王之間，終究存在著宿命，你明白，在你的冒險結束後，又會有新的魔王誕生......'
+                            bot.sendMessage(user_id, text);
+                            sleep(0.2);
+                            gameActive = 0
+                            gameEnd = 1
                         if(gameActive==1):
                             if(gameBot.state=='maou'):
-                                text = '接下來要採取的行動是?\n   攻擊(輸入 attack)\n   防禦(輸入 defend)\n   使用技能(輸入 skill)\n   查看自身狀態(輸入status)\n   使用藥水(輸入item)'
+                                if(cd>0):
+                                    cd = cd -1
+                                noAtk = 0
+                                text = '魔王HP: {0}/{1}\n\n接下來要採取的行動是?\n   攻擊(輸入 attack)\n   防禦(輸入 defend)\n   使用技能(輸入 skill)\n   查看自身狀態(輸入status)\n   使用藥水(輸入item)\n\n你的HP: {2}/{3}\n\"全力一擊\" cd:{4}'.format(maouHP, maouHPMax, HP, HPMax, cd)
                                 bot.sendMessage(user_id, text);
                             else:
                                 text = '接下來要採取的行動是?\n   探索(輸入 seek)\n   查看自身狀態(輸入status)\n   使用藥水(輸入item)\n   離開(輸入exit)'
