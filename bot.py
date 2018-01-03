@@ -63,7 +63,6 @@ def main():
     maouAtk = 6
     maouDef = 3
     maouStart = 0;
-#    maouAttk = 0;
     damage = 0;
     attack = 0;
     defend = 0;
@@ -373,8 +372,8 @@ def main():
                             if(big==1):
                                 big = 0
                                 HP = HP - (maouAtk - resist - defend + 2)
-                                defend = 0
                                 text = '魔王將手中聚集的魔素全部放出，魔力的奔流將你吞噬!(你受到了{0}點傷害)'.format((maouAtk - resist - defend + 2))
+                                defend = 0
                             elif(textChange==1):
                                 HP = HP - (maouAtk - resist - defend)
                                 text = '魔王手中的黑光綻裂，射向了你!(你受到了{0}點傷害)'.format((maouAtk - resist - defend))
