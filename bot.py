@@ -63,7 +63,7 @@ def main():
     maouAtk = 6
     maouDef = 3
     maouStart = 0;
-    maouAttk = 0;
+#    maouAttk = 0;
     damage = 0;
     attack = 0;
     defend = 0;
@@ -117,7 +117,6 @@ def main():
                 plus = 0;
                 resist = 0;
                 maouStart = 0;
-                maouAttk = 0;
                 damage = 0;
                 attack = 0;
                 defend = 0;
@@ -151,7 +150,7 @@ def main():
                         user_id = update["message"]["from_user"]["id"]
                         lastMessageId = msg_id;
                         if(text=='seek' and gameBot.state=='swamp'):
-                            textChange = random.randint(1, (6-sword))
+                            textChange = random.randint(1, (7-sword))
                             if(textChange==1 or textChange==2):
                                 seekP = seekP + textChange
                                 if(textChange==2):
@@ -162,27 +161,27 @@ def main():
                                 text = '周圍的景色像是被火燒過一般，枯木，死地，寸草不生。(調查進度+{0})'.format(textChange)
                                 bot.sendMessage(user_id, text);
                                 sleep(0.2);
-                            elif(textChange==3):
-                                seekP = seekP + textChange
-                                text = '沼澤不斷地冒出血色的氣泡，你嘗試往裡面窺視，看到的卻只有無盡的汙濁。(調查進度+{0})'.format(textChange)
+                            elif(textChange==3 or textChange==4):
+                                seekP = seekP + (textChange - 1)
+                                text = '沼澤不斷地冒出血色的氣泡，你嘗試往裡面窺視，看到的卻只有無盡的汙濁。(調查進度+{0})'.format((textChange - 1))
                                 bot.sendMessage(user_id, text);
                                 sleep(0.2);
-                            elif(textChange==4):
-                                seekP = seekP + textChange
+                            elif(textChange==5):
+                                seekP = seekP + (textChange - 1)
                                 against = random.randint(0, 99)
                                 limit = (STR*6)
                                 if(limit>99):
                                     limit = 99
                                 if(against<(STR*6)):
                                     STR = STR + 1
-                                    text = '旁邊的刺藤纏住了你的腳踝!你嘗試掙脫:\n(STR抵抗6倍: {0}/{1} 成功)\n你成功掙脫了束縛，刺藤依舊在你背後張牙舞爪地扭動著。(STR+1)(調查進度+{2})'.format(against, limit, textChange)
+                                    text = '旁邊的刺藤纏住了你的腳踝!你嘗試掙脫:\n(STR抵抗6倍: {0}/{1} 成功)\n你成功掙脫了束縛，刺藤依舊在你背後張牙舞爪地扭動著。(STR+1)(調查進度+{2})'.format(against, limit, (textChange - 1))
                                 else:
                                     HP = HP - 1
                                     text = '旁邊的刺藤纏住了你的腳踝!你嘗試掙脫:\n(STR抵抗6倍: {0}/{1} 失敗)\n你失敗了，刺藤割傷了你的皮膚。(HP-1)(調查進度+{2})'.format(against, limit, textChange)
                                 bot.sendMessage(user_id, text);
                                 sleep(0.2);
-                            elif(textChange==5):
-                                seekP = seekP + (textChange - 1)
+                            elif(textChange==6):
+                                seekP = seekP + (textChange - 2)
                                 against = random.randint(0, 99)
                                 limit = (POW*4)
                                 if(limit>99):
@@ -190,17 +189,17 @@ def main():
                                 if(against<(POW*4)):
                                     POW = POW + 1
                                     LUK = POW * 5
-                                    text = '沼澤的毒氣模糊著你的心智，你感覺像要被拉到另一個世界:\n(POW抵抗4倍: {0}/{1} 成功)\n你成功回復了神智，拍打著臉加讓自己有幹勁繼續探索。(POW+1)(調查進度+{2})'.format(against, limit, (textChange - 1))
+                                    text = '沼澤的毒氣模糊著你的心智，你感覺像要被拉到另一個世界:\n(POW抵抗4倍: {0}/{1} 成功)\n你成功回復了神智，拍打著臉加讓自己有幹勁繼續探索。(POW+1)(調查進度+{2})'.format(against, limit, (textChange - 2))
                                 else:
                                     HP = HP - 2
                                     text = '沼澤的毒氣模糊著你的心智，你感覺像要被拉到另一個世界:\n(POW抵抗4倍: {0}/{1} 失敗)\n你因為毒氣而昏厥，醒來的時候，身上多了不明的啃咬痕跡跟莫名的不適感。(HP-2)(調查進度+{2})'.format(against, limit, (textChange - 1))
                                 bot.sendMessage(user_id, text);
                                 sleep(0.2);
-                            elif(textChange==6):
-                                seekP = seekP + (textChange - 1)
+                            elif(textChange==7):
+                                seekP = seekP + (textChange - 2)
                                 sword = 1
                                 plus = plus + 4
-                                text = '你在血色的泥濘裡瞥見了一處奇怪的隆起，定睛一看，那是一把燃著鮮豔紅色的長劍，劍身鋒利的彷彿能斬斷一切邪惡。\n你得到了斬邪焰劍。(傷害加成+4)(調查進度+{0})'.format((textChange - 1))
+                                text = '你在血色的泥濘裡瞥見了一處奇怪的隆起，定睛一看，那是一把燃著鮮豔紅色的長劍，劍身鋒利的彷彿能斬斷一切邪惡。\n你得到了斬邪焰劍。(傷害加成+4)(調查進度+{0})'.format((textChange - 2))
                                 bot.sendMessage(user_id, text);
                                 sleep(0.2);
                         elif(text=='seek' and gameBot.state=='volcano'):
@@ -334,6 +333,7 @@ def main():
                                 bot.sendMessage(user_id, text);
                                 sleep(0.2);
                             else:
+                                noAtk = 1
                                 text = '...都已經來到這裡了，怎麼能夠輕易退卻!\n你咬緊牙關，抹消逃跑的念頭，繼續奮戰。'
                                 bot.sendMessage(user_id, text);
                                 sleep(0.2);
@@ -342,61 +342,73 @@ def main():
                             text = 'hurt!'
                             bot.sendMessage(user_id, text);
                             sleep(0.2);
+                        elif(text=='video'):
+                            text = 'https://www.youtube.com/watch?v=epfPe2U_2Xk'
+                            bot.sendMessage(user_id, text);
+                            sleep(0.2);
                         else:
                             bot.sendMessage(user_id, text);
                             sleep(0.2);
                             textChange = random.randint(1, 3)
-                            if(textChange==1):
-                                text = '你喃喃唸道，坐在原地休息，環顧著四周荒蕪的景色，心中湧起了一陣淒涼，但這也化作驅使你前進的動力。'
-                            elif(textChange==2):
-                                text = '你向這片大地吶喊，然而它卻沒給你任何回應，這世界彷彿只有你與這一片死寂。'
+                            if(gameBot.state=='maou'):
+                                noAtk = 1
+                                if(textChange==1):
+                                    text = '在戰鬥中，有一個這樣的聲音在你的心中響起，讓你稍微忘卻了恐懼，認真面對眼前的強敵!'
+                                elif(textChange==2):
+                                    text = '你喃喃念著這樣的一句話，彷彿它也是一句咒文，能夠讓你獲得力量。'
+                                else:
+                                    text = '汗不斷的落在地上，你握著劍的手依然微微顫抖著，不知哪裡傳來的這陣聲音，讓你微微感到心安。'
                             else:
-                                text = '你的心中響起了這樣一道聲音，你不知道它到底從哪裡來。也許，是這個世界在嘗試與你對話吧。'
+                                if(textChange==1):
+                                    text = '你喃喃唸道，坐在原地休息，環顧著四周荒蕪的景色，心中湧起了一陣淒涼，但這也化作驅使你前進的動力。'
+                                elif(textChange==2):
+                                    text = '你向這片大地吶喊，然而它卻沒給你任何回應，這世界彷彿只有你與這一片死寂。'
+                                else:
+                                    text = '你的心中響起了這樣一道聲音，你不知道它到底從哪裡來。也許，是這個世界在嘗試與你對話吧。'
                             bot.sendMessage(user_id, text);
                             sleep(0.2);
                         if(maouStart==1 and noAtk==0 and maouHP>0):
                             #maou's turn
-                            if(maouAttk==0):
-                                maouAttk = 1;
-                                text = '\"哼!看看是誰來了?余只看到又一個既無知又可笑，前來送死的螻蟻啊!\"\n魔王以極度輕蔑的眼神與口吻，緩緩的瞥向了你，你不由得感到渾身顫慄。\n魔王緩緩起身，\"...余也正好興致高漲，就陪汝玩玩吧!\"'
-                                bot.sendMessage(user_id, text);
-                                sleep(0.2);
-                            else:
-                                textChange = random.randint(1, 4)
-                                if(textChange==1):
-                                    HP = HP - (maouAtk - resist - defend)
-                                    text = '魔王手中的黑光綻裂，射向了你!(你受到了{0}點傷害)'.format((maouAtk - resist - defend))
-                                    defend = 0
-                                elif(textChange==2):
-                                    if(big==0):
-                                        big = 1
-                                        text = '魔王露出了戲謔的笑容，開始詠唱咒語，龐大的魔素在他面前濃縮。(下一次魔王的傷害提高1.5倍)'
-                                    else:
-                                        text = '魔王靜靜的睥睨著你，彷彿你在他眼中，只是一顆沙粒不過的存在。(沒有動作)'
-                                elif(textChange==3):
-                                    if(big==1):
-                                        big = 0
-                                        HP = HP - (maouAtk - resist - defend + 2)
-                                        text = '魔王將手中聚集的魔素全部放出，魔力的奔流將你吞噬!(你受到了{0}點傷害)'.format((maouAtk - resist - defend + 2))
-                                    else:
-                                        HP = HP - (maouAtk - resist - defend - 1)
-                                        defend = 0
-                                        text = '魔王手中的黑光綻裂，射向了你!(你受到了{0}點傷害)'.format((maouAtk - resist - defend - 1))
-                                elif(textChange==4):
+                            textChange = random.randint(1, 4)
+                            if(big==1):
+                                big = 0
+                                HP = HP - (maouAtk - resist - defend + 2)
+                                defend = 0
+                                text = '魔王將手中聚集的魔素全部放出，魔力的奔流將你吞噬!(你受到了{0}點傷害)'.format((maouAtk - resist - defend + 2))
+                            elif(textChange==1):
+                                HP = HP - (maouAtk - resist - defend)
+                                text = '魔王手中的黑光綻裂，射向了你!(你受到了{0}點傷害)'.format((maouAtk - resist - defend))
+                                defend = 0
+                            elif(textChange==2):
+                                if(big==0):
+                                    big = 1
+                                    text = '魔王露出了戲謔的笑容，開始詠唱咒語，龐大的魔素在他面前濃縮。(下一次魔王的傷害提高1.5倍)'
+                            elif(textChange==3):
+                                HP = HP - (maouAtk - resist - defend - 1)
+                                defend = 0
+                                text = '魔王手中的魔素化作箭矢，射向了你!(你受到了{0}點傷害)'.format((maouAtk - resist - defend - 1))
+                            elif(textChange==4):
+                                against = random.randint(1, 2)
+                                if(against==1):
                                     text = '魔王狂笑著，彷彿在恥笑你是個天大的笑話。(沒有動作)'
-                                bot.sendMessage(user_id, text);
-                                sleep(0.2);
+                                else:
+                                    text = '魔王靜靜的睥睨著你，彷彿你在他眼中，只是一顆沙粒不過的存在。(沒有動作)'
+                            bot.sendMessage(user_id, text);
+                            sleep(0.2);
                         if(gameBot.state=='swamp' and seekP>=17):
                             seekP = 0;
                             gameBot.trigger('area1_clear')
                             text = '你發現了通往下一個地區的路徑。\n中繼點: 炎獄山脈\n...在這個地區蔓延的只有熾熱，還有地上遍布的熔岩跟石頭碎塊，眼前的一切彷彿都在搖晃。你並沒有放棄，繼續在這個地方尋找著通往魔王城的道路。'
                             bot.sendMessage(user_id, text);
                             sleep(0.2);
-                        elif(gameBot.state=='volcano' and seekP>=20):
+                        elif(gameBot.state=='volcano' and seekP>=22):
                             seekP = 0;
                             maouStart = 1;
                             gameBot.trigger('area2_clear')
                             text = '你在熔岩的縫隙發現一條道路，前面吹來了不祥的氣息。\n終戰: 魔王城\n...那個既邪惡又強大的身影佇立在你的面前，光是他的視線就快要使你窒息。但你穩住自己顫抖的雙腳，挺身而出，為了家園，也為了自己的榮譽而戰!'
+                            bot.sendMessage(user_id, text);
+                            sleep(0.2);
+                            text = '\"哼!看看是誰來了?余只看到又一個既無知又可笑，前來送死的螻蟻啊!\"\n魔王以極度輕蔑的眼神與口吻，緩緩的瞥向了你，你不由得感到渾身顫慄。\n魔王緩緩向你踏出了一步，\"...余也正好興致高漲，就陪汝玩玩吧!\"'
                             bot.sendMessage(user_id, text);
                             sleep(0.2);
                         elif(HP<=0):
