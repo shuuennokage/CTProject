@@ -6,4 +6,5 @@
 * python3 bot.py，顯示You can start now後可開始傳送資訊(前面有繪圖時間)
 ## state表示圖
 [picture]: https://raw.githubusercontent.com/shuuennokage/CTProject/master/state_diagram.png  "pic"
+![Alt text][picture]
 
